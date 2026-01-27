@@ -23,7 +23,7 @@ export default function FeaturedCarousel({ properties }: CarouselProps) {
                     <h2 style={{ fontSize: '2.75rem', fontWeight: 700, marginBottom: '1rem', fontFamily: 'var(--font-heading)' }}>
                         <span className="text-gradient-gold">Featured Properties</span>
                     </h2>
-                    <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: 'var(--secondary)', fontWeight: 600 }}>
+                    <p style={{ fontSize: '1.1rem', lineHeight: 1.6, color: 'var(--muted)', fontWeight: 500 }}>
                         Highlights from our premium collection
                     </p>
                 </div>
