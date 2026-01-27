@@ -1,0 +1,72 @@
+.gridSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.textColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.imageContainer {
+    position: relative;
+    height: 400px;
+    border-radius: 24px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.heading {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-heading);
+    /* Color handled by utility classes */
+    line-height: 1.2;
+    font-weight: 800;
+    /* Added weight for better premium feel */
+}
+
+.paragraph {
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 1.1rem;
+}
+
+.readMore {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.ctaSection {
+    background: white;
+    padding: 6rem 0;
+    text-align: center;
+    color: var(--foreground);
+    box-shadow: none;
+    border-top: none;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .gridSection {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .imageContainer {
+        height: 300px;
+        /* Smaller image on mobile */
+        order: -1;
+        /* Show image first on mobile? Or keep standard text first. User didn't specify, but text first is usually better for "Who We Are" if it's intro, but visuals are nice. I'll leave order alone for now (Text top). */
+    }
+
+    .heading {
+        font-size: 2rem;
+    }
+}

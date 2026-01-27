@@ -1,0 +1,118 @@
+.hero {
+    position: relative;
+    height: 100vh;
+    max-height: 900px;
+    min-height: 700px;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bgImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(15, 23, 42, 0.7));
+    z-index: 0;
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    color: white;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 24px;
+}
+
+.badge {
+    display: inline-block;
+    background: rgba(59, 130, 246, 0.2);
+    /* Tinted with Secondary Blue */
+    backdrop-filter: blur(8px);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.title {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+    font-weight: 400;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Custom button overrides for Hero */
+.heroBtnPrimary {
+    background: var(--gradient-royal);
+    /* Blue to Pink Gradient */
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+    /* Pink shadow */
+}
+
+.heroBtnPrimary:hover {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.heroBtnOutline {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.heroBtnOutline:hover {
+    background: white;
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.8rem;
+    }
+
+    .buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+}

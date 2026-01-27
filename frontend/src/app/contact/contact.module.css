@@ -1,0 +1,182 @@
+.main {
+    padding-top: 80px;
+    background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+    min-height: 100vh;
+}
+
+.contactGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.infoSection {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.infoTitle {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-heading);
+    color: var(--primary);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.infoDescription {
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 1.05rem;
+}
+
+.contactCards {
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.singleContactPanel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    width: 100%;
+}
+
+.contactItem {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.iconWrapper {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.cardTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.cardText {
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+.formSection {
+    position: sticky;
+    top: 100px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .contactGrid {
+        gap: 3rem;
+    }
+
+    .infoTitle {
+        font-size: 1.75rem;
+    }
+
+    .singleContactPanel {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 2rem;
+    }
+
+    .contactItem {
+        flex: 1;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .contactGrid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .infoTitle {
+        font-size: 1.5rem;
+    }
+
+    .infoDescription {
+        font-size: 1rem;
+    }
+
+    .contactCards {
+        grid-template-columns: 1fr;
+    }
+
+    .contactCard {
+        padding: 1.5rem;
+    }
+
+    .singleContactPanel {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .contactItem {
+        flex: 1;
+    }
+
+    .iconWrapper {
+        width: 48px;
+        height: 48px;
+    }
+
+    .hoursCard {
+        padding: 1.5rem;
+    }
+
+    .formSection {
+        position: static;
+    }
+}
+
+@media (max-width: 480px) {
+    .singleContactPanel {
+        padding: 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .iconWrapper {
+        width: 44px;
+        height: 44px;
+    }
+
+    .cardTitle {
+        font-size: 0.95rem;
+    }
+
+    .cardText {
+        font-size: 0.85rem;
+    }
+
+    .hoursCard {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+}

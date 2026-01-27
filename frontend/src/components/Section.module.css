@@ -1,0 +1,55 @@
+.section {
+    padding: 100px 0;
+}
+
+.light {
+    background: transparent;
+}
+
+.gray {
+    background: var(--light-gray);
+}
+
+.dark {
+    background: var(--primary);
+    color: white;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 60px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title {
+    font-size: 2.75rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-family: var(--font-heading);
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.dark .subtitle {
+    color: #cbd5e1;
+}
+
+.dark .title {
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 70px 0;
+    }
+
+    .title {
+        font-size: 2.25rem;
+    }
+}

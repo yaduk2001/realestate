@@ -1,0 +1,70 @@
+.sectionContainer {
+    overflow: hidden;
+    padding: 4rem 0;
+    /* Background handled by Section props (white) originally, adding explicit for standalone */
+}
+
+.lightBg {
+    background: white;
+}
+
+/*
+  Outer Border Layer:
+  Full width for maximum scrolling breadth.
+*/
+.outerBorderLayer {
+    position: relative;
+    width: 100%;
+    /* Full breadth */
+    max-width: none;
+    /* Removed restriction */
+    margin: 0;
+    padding: 2px 0;
+    /* Top/bottom border only effectively, or keep simple */
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    border-radius: 0;
+    /* Edge to edge */
+}
+
+.carouselWrapper {
+    position: relative;
+    background: white;
+    border-radius: 0;
+    padding: 2rem 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+/* GRADIENT MASKS REMOVED COMPLETELY */
+.carouselWrapper::before,
+.carouselWrapper::after {
+    display: none;
+}
+
+.carouselWrapper::before {
+    left: 0;
+    background: linear-gradient(to right, white, transparent);
+}
+
+.carouselWrapper::after {
+    right: 0;
+    background: linear-gradient(to left, white, transparent);
+}
+
+.trackContainer {
+    overflow: hidden;
+    width: 100%;
+}
+
+.track {
+    display: flex;
+    width: max-content;
+    /* Important for horizontal scrolling */
+    gap: 2rem;
+}
+
+.slide {
+    width: 350px;
+    /* Fixed width for consistent card sizing */
+    flex-shrink: 0;
+}

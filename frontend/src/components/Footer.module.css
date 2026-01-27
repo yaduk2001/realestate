@@ -1,0 +1,138 @@
+.footer {
+    background: #020617;
+    /* Solid Deep Black/Blue (Slate-950) - Distinct from gradient */
+    color: white;
+    padding: 30px 0 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.brandDesc {
+    color: #94a3b8;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    max-width: 280px;
+    line-height: 1.4;
+}
+
+.brandLogo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    font-family: var(--font-heading);
+    margin-bottom: 0.5rem;
+}
+
+.heading {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: white;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.linkList {
+    list-style: none;
+    padding: 0;
+}
+
+.linkItem {
+    margin-bottom: 0.3rem;
+}
+
+.link {
+    color: #cbd5e1;
+    transition: all 0.2s;
+    font-size: 0.8rem;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: var(--accent);
+    transform: translateX(2px);
+}
+
+.socials {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.socialLink {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.socialLink:hover {
+    color: white;
+    background: var(--accent);
+    transform: translateY(-2px);
+    border-color: var(--accent);
+}
+
+.contactItem {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    color: #cbd5e1;
+    font-size: 0.8rem;
+    margin-bottom: 0.6rem;
+    line-height: 1.4;
+}
+
+.iconWrapper {
+    color: var(--accent);
+    margin-top: 2px;
+    /* Visual alignment for text */
+    flex-shrink: 0;
+}
+
+.bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #475569;
+    font-size: 0.75rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+}

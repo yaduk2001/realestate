@@ -1,0 +1,160 @@
+.serviceCard {
+    background: white;
+    padding: 2.5rem 2rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+    text-align: left;
+    height: 100%;
+}
+
+.serviceCard:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.iconWrapper {
+    width: 70px;
+    height: 70px;
+    background: var(--light-gray);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    transition: all 0.3s ease;
+}
+
+.serviceCard:hover .iconWrapper {
+    background: var(--accent);
+    color: white;
+    transform: rotate(3deg);
+}
+
+.serviceTitle {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--primary);
+    font-family: var(--font-heading);
+}
+
+.serviceDesc {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Why Choose Us Items */
+.whyGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+}
+
+.whyItem {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.whyIconBox {
+    width: 60px;
+    height: 60px;
+    background: rgba(202, 138, 4, 0.1);
+    color: var(--accent);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s;
+}
+
+.whyItem:hover .whyIconBox {
+    transform: scale(1.1);
+    background: var(--accent);
+    color: white;
+}
+
+.whyContent h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.whyContent p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Testimonial Card */
+.testimonialCard {
+    background: white;
+    padding: 2.5rem;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border);
+    position: relative;
+    transition: transform 0.3s;
+}
+
+.testimonialCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+.quoteIcon {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    color: var(--light-gray);
+    opacity: 0.5;
+}
+
+.testimonialText {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--primary);
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+}
+
+.client {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--light-gray);
+}
+
+.clientInfo h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 2px;
+}
+
+.clientInfo p {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+@media (max-width: 768px) {
+    .whyGrid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
