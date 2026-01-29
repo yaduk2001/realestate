@@ -141,6 +141,8 @@ const featuredProperties = [
   ...moreProperties
 ];
 
+import ScrollingBanner from "@/components/ScrollingBanner";
+
 export default function Home_Page() {
   return (
     <main>
@@ -188,6 +190,8 @@ export default function Home_Page() {
           </div>
         </div>
       </Section>
+
+      <ScrollingBanner />
 
       {/* CTA Section */}
       <section className={styles.ctaSection}>
