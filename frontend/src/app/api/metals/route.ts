@@ -1,128 +1,150 @@
 import { NextResponse } from 'next/server';
-import { getMetalsHistory, addMetalRate, MetalRate } from '@/lib/metalsStore';
+import { Redis } from '@upstash/redis';
+
+// Define the shape of our stored data
+export interface MetalRate {
+    date: string;
+    timeSlot: 'morning' | 'evening';
+    timestamp: string;
+    rates: Record<string, number>;
+}
+
+const CACHE_KEY = 'metals_current';
+const HISTORY_KEY = 'metals_history';
+
+// Initialize Redis client (uses Vercel's Upstash integration env vars)
+function getRedisClient() {
+    const url = process.env.KV_REST_API_URL;
+    const token = process.env.KV_REST_API_TOKEN;
+
+    if (!url || !token) {
+        return null;
+    }
+
+    return new Redis({ url, token });
+}
 
 export async function GET() {
     try {
         const NOW = new Date();
-        // Assumption: Server time is correctly set to local time (IST based on metadata)
-        // If deployed to UTC env, this logic needs timezone adjustment. 
-        // For local dev on provided Windows machine, new Date() is fine.
-
-        // Calculate "Current Slot"
         const hour = NOW.getHours();
 
+        // Determine target date and time slot
         let targetDate: Date;
         let targetSlot: 'morning' | 'evening';
 
         if (hour < 9) {
-            // Before 9 AM -> Belongs to Yesterday's Evening slot
+            // Before 9 AM - show yesterday's evening data
             const yesterday = new Date(NOW);
             yesterday.setDate(NOW.getDate() - 1);
             targetDate = yesterday;
             targetSlot = 'evening';
         } else if (hour >= 9 && hour < 19) {
-            // 9 AM to 7 PM -> Today's Morning slot
+            // Between 9 AM and 7 PM - show today's morning data
             targetDate = NOW;
             targetSlot = 'morning';
         } else {
-            // After 7 PM -> Today's Evening slot
+            // After 7 PM - show today's evening data
             targetDate = NOW;
             targetSlot = 'evening';
         }
 
-        const dateStr = targetDate.toISOString().split('T')[0]; // YYYY-MM-DD
+        const dateStr = targetDate.toISOString().split('T')[0];
 
-        const history = await getMetalsHistory();
-        const cachedRate = history.find(r => r.date === dateStr && r.timeSlot === targetSlot);
+        // Try to get cached data from Upstash Redis
+        let cachedRate: MetalRate | null = null;
+        let history: MetalRate[] = [];
+        const redis = getRedisClient();
 
-        if (cachedRate) {
+        if (redis) {
+            try {
+                cachedRate = await redis.get<MetalRate>(CACHE_KEY);
+                history = await redis.get<MetalRate[]>(HISTORY_KEY) || [];
+            } catch (redisError) {
+                console.log('Redis error:', redisError);
+            }
+        } else {
+            console.log('Redis not configured (missing KV_REST_API_URL or KV_REST_API_TOKEN)');
+        }
+
+        // Check if we have valid cached data for current slot
+        if (cachedRate && cachedRate.date === dateStr && cachedRate.timeSlot === targetSlot) {
             return NextResponse.json({
                 current: cachedRate,
-                history: history.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+                history: history.slice(0, 14) // Last 7 days (14 entries)
             });
         }
 
-        // No cache, need to fetch
+        // Need to fetch new data
         const apiKey = process.env.METALS_DEV_API_KEY;
+
         if (!apiKey) {
-            console.error('API Key is missing in environment variables');
-            // Fallback or error if no key
-            return NextResponse.json({ error: 'API Key missing' }, { status: 500 });
+            // No API key - return cached data if available
+            if (cachedRate) {
+                return NextResponse.json({
+                    current: cachedRate,
+                    history: history.slice(0, 14),
+                    warning: 'API key not configured, showing last known rates'
+                });
+            }
+            return NextResponse.json({ error: 'No API key and no cached data available' }, { status: 500 });
         }
 
+        // Fetch from API
         const apiUrl = `https://api.metals.dev/v1/latest?api_key=${apiKey}&currency=USD&unit=toz`;
         const response = await fetch(apiUrl);
 
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Metals API Failed: ${response.status} ${response.statusText}`, errorText);
+            console.error(`Metals API Failed: ${response.status}`);
 
-            // If API fails, try to return latest available history
-            const latest = history[history.length - 1];
-            if (latest) {
+            // Return cached data if API fails
+            if (cachedRate) {
                 return NextResponse.json({
-                    current: latest,
-                    history: history,
-                    warning: 'API call failed, showing stale data'
+                    current: cachedRate,
+                    history: history.slice(0, 14),
+                    warning: 'API unavailable, showing last known rates'
                 });
             }
-
-            // FALLBACK FOR DEMO: If no history and API fails (e.g. invalid key), return mock data
-            // so the user can see the UI implementation.
-            if (!latest && (response.status === 401 || response.status === 403 || response.status === 422 || response.status === 402)) {
-                const mockRate: MetalRate = {
-                    date: dateStr,
-                    timeSlot: targetSlot,
-                    timestamp: NOW.toISOString(),
-                    rates: {
-                        gold: 2024.50,
-                        silver: 22.85,
-                        platinum: 915.20,
-                        palladium: 980.10,
-                        XAU: 2024.50,
-                        XAG: 22.85,
-                        XPT: 915.20,
-                        XPD: 980.10
-                    }
-                };
-                // We do NOT save this to disk to avoid corrupting real data flow later, 
-                // or we could save it if we want it to persist for the demo. 
-                // Let's save it so the table populates.
-                await addMetalRate(mockRate);
-                const newHistory = await getMetalsHistory();
-
-                return NextResponse.json({
-                    current: mockRate,
-                    history: newHistory,
-                    warning: 'API Key Invalid. Showing MOCK data for demonstration.'
-                });
-            }
-
-            return NextResponse.json({ error: 'Failed to fetch rates', details: errorText }, { status: 502 });
+            return NextResponse.json({ error: 'API failed and no cached data' }, { status: 500 });
         }
 
         const data = await response.json();
 
-        // Construct new rate object
+        // Create new rate entry
         const newRate: MetalRate = {
             date: dateStr,
             timeSlot: targetSlot,
             timestamp: NOW.toISOString(),
-            rates: data.metals || {}
+            rates: data.metals
         };
 
-        await addMetalRate(newRate);
+        // Save to Upstash Redis
+        if (redis) {
+            try {
+                await redis.set(CACHE_KEY, newRate);
 
-        // Re-read history to be sure or just append in memory
-        const updatedHistory = [...history, newRate].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+                // Add to history if not duplicate
+                const existingIndex = history.findIndex(r => r.date === dateStr && r.timeSlot === targetSlot);
+                if (existingIndex === -1) {
+                    history.unshift(newRate);
+                    // Keep only last 30 entries
+                    if (history.length > 30) {
+                        history = history.slice(0, 30);
+                    }
+                    await redis.set(HISTORY_KEY, history);
+                }
+            } catch (redisError) {
+                console.log('Failed to save to Redis:', redisError);
+            }
+        }
 
         return NextResponse.json({
             current: newRate,
-            history: updatedHistory
+            history: history.slice(0, 14)
         });
 
     } catch (error) {
         console.error('Metals API Error:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }

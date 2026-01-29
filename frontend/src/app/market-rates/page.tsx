@@ -73,7 +73,7 @@ export default function MarketRatesPage() {
                                     <td style={{ fontWeight: 500 }}>{formatDate(item.date)}</td>
                                     <td>
                                         <span className={`${styles.badge} ${item.timeSlot === 'morning' ? styles.badgeMorning : styles.badgeEvening}`}>
-                                            {item.timeSlot}
+                                            {item.timeSlot === 'morning' ? '9 AM' : '7 PM'}
                                         </span>
                                     </td>
                                     <td style={{ fontFamily: 'monospace', color: 'var(--primary)', fontWeight: 'bold' }}>

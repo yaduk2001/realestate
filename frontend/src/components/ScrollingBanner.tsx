@@ -5,26 +5,45 @@ interface MetalRates {
     [key: string]: number;
 }
 
+interface ApiResponse {
+    current?: {
+        rates: MetalRates;
+        timestamp: string;
+    };
+    error?: string;
+    warning?: string;
+}
+
 export default function ScrollingBanner() {
     const [rates, setRates] = useState<MetalRates | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [lastUpdated, setLastUpdated] = useState<string>('');
 
     useEffect(() => {
         fetch('/api/metals')
             .then((res) => res.json())
-            .then((data) => {
+            .then((data: ApiResponse) => {
                 if (data.current && data.current.rates) {
                     setRates(data.current.rates);
+                    if (data.current.timestamp) {
+                        const date = new Date(data.current.timestamp);
+                        setLastUpdated(date.toLocaleString('en-IN', {
+                            dateStyle: 'medium',
+                            timeStyle: 'short'
+                        }));
+                    }
+                } else if (data.error) {
+                    setError(data.error);
                 }
                 setLoading(false);
             })
             .catch((err) => {
                 console.error('Failed to fetch rates', err);
+                setError('Failed to load rates');
                 setLoading(false);
             });
     }, []);
-
-    if (loading || !rates) return null;
 
     const USD_TO_INR = 84.50;
 
@@ -34,6 +53,26 @@ export default function ScrollingBanner() {
             currency: 'INR',
             maximumFractionDigits: 0
         }).format(val * USD_TO_INR);
+
+    // Don't show anything while loading
+    if (loading) {
+        return (
+            <section style={{
+                background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+                padding: '2rem 0',
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+                borderBottom: '1px solid rgba(255,255,255,0.1)',
+                textAlign: 'center'
+            }}>
+                <span style={{ color: 'rgba(255,255,255,0.6)' }}>Loading market rates...</span>
+            </section>
+        );
+    }
+
+    // Don't show if error or no rates
+    if (error || !rates) {
+        return null;
+    }
 
     const items = [
         { label: 'Gold', value: rates.gold || rates.XAU },
@@ -67,7 +106,7 @@ export default function ScrollingBanner() {
                     letterSpacing: '1px',
                     textTransform: 'uppercase'
                 }}>
-                    Live Market Rates • Updated 9 AM & 7 PM
+                    Live Market Rates {lastUpdated && `• Last Updated: ${lastUpdated}`}
                 </span>
             </div>
 
